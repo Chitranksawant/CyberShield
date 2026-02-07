@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Settings</h1>
+
+<div class="settings-option">
+    <label>
+        <input type="checkbox" id="notifications"> Enable Notifications
+    </label>
+</div>
+
+<div class="settings-option">
+    <label>
+        <input type="checkbox" id="darkmode" onclick="toggleTheme()"> Dark Mode
+    </label>
+</div>
+
+<div class="settings-option">
+    <label>
+        <input type="checkbox" id="previewMode"> Preview Mode
+    </label>
+</div>
+
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+    const notifToggle = document.getElementById("notifications");
+
+    // Restore saved state on page load
+    const saved = localStorage.getItem("notificationsEnabled");
+    if (saved !== null) {
+        notifToggle.checked = saved === "true";
+    }
+
+    // Save state whenever user changes the toggle
+    notifToggle.addEventListener("change", (e) => {
+        localStorage.setItem("notificationsEnabled", e.target.checked);
+    });
+});
+
+document.addEventListener("DOMContentLoaded", async function () {
+    // Dark mode
+    if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark");
+        if (document.getElementById("darkmode")) {
+            document.getElementById("darkmode").checked = true;
+        }
+    }
+
+    // ✅ Always load preview mode from backend
+    try {
+        const r = await fetch("/get_preview_mode");
+        const data = await r.json();
+        const previewCheckbox = document.getElementById("previewMode");
+        previewCheckbox.checked = data.previewMode;
+
+        // Attach listener (not tied to localStorage)
+        previewCheckbox.addEventListener("change", async function() {
+            const enabled = this.checked;
+
+            await fetch("/set_preview_mode", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ previewMode: enabled })
+            });
+
+            alert("Preview Mode " + (enabled ? "Enabled" : "Disabled"));
+        });
+    } catch (e) {
+        console.error("Failed to load preview mode:", e);
+    }
+});
+</script>
+
+<style>
+.settings-option { margin: 15px 0; }
+</style>
+{% endblock %}

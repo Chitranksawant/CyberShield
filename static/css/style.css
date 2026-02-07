@@ -1,0 +1,188 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color, #ffffff);
+    color: var(--text-color, #000000);
+    transition: background 0.3s, color 0.3s;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #1a1a1a;
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding-top: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.sidebar.closed {
+    transform: translateX(-250px);
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 15px;
+    border-bottom: 1px solid #333;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    transition: margin-left 0.3s;
+}
+
+.main-content.full {
+    margin-left: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.theme-btn {        /* For Dark Mode Icon */
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: inherit;
+}
+
+.toggle-btn{        /*For Sidebar Icon*/
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: black;
+}
+
+body.dark .toggle-btn {
+    color: white;
+}
+
+/* ---------- Dashboard Table ---------- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    color: black !important; /* Always black text */
+}
+
+table th {
+    background: #f4f4f4;
+}
+
+/* Refresh Button */
+#refreshBtn {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#refreshBtn:hover {
+    background: #0056b3;
+}
+
+/* Notifications */
+#notification {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #ff4d4d;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    padding: 12px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    font-weight: bold;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+    transition: opacity 0.5s, visibility 0.5s;
+    opacity: 0;
+}
+
+#notification.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* ---------- Settings Page ---------- */
+.settings-option {
+    margin: 15px 0;
+}
+
+/* ---------- Dark Theme ---------- */
+body.dark {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* Ensure main content text is readable in dark mode */
+body.dark .main-content p,
+body.dark .main-content h1,
+body.dark .main-content h2,
+body.dark .main-content h3,
+body.dark .main-content label {
+    color: white;
+}
+
+body.dark .main-content,
+body.dark .main-content p.report {
+    color: rgb(0, 0, 0);
+}
+
+/* Settings labels in dark mode */
+body.dark .settings-option label {
+    color: white;
+}
+
+/* Dashboard table stays black even in dark mode */
+body.dark #commentsTable th {
+    color: black !important;
+}
+
+body.dark #commentsTable td{
+    color: rgb(255, 255, 255) !important;
+}
+
+/* Light mode (default) */
+.comment-safe { background-color: #d4edda; color: #155724; }
+.comment-toxic { background-color: #fff3cd; color: #856404; }
+.comment-deleted { background-color: #f8d7da; color: #721c24; }
+
+/* Dark mode overrides */
+body.dark .comment-safe { background-color: #2a4d2a; color: #a6f1a6; }
+body.dark .comment-toxic { background-color: #665e1e; color: #fff3cd; }
+body.dark .comment-deleted { background-color: #5a1e1e; color: #ffbaba; }

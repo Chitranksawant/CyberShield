@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberShield - Logged Out</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-r from-gray-700 to-gray-900">
+  <div class="bg-white rounded-2xl shadow-xl p-8 w-96 text-center">
+    
+    <!-- Logo -->
+    <img src="{{ url_for('static', filename='icons/icon-192.png') }}" alt="CyberShield Logo" class="w-20 h-20 mx-auto mb-4 rounded-xl">
+    
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">👋 Logged Out</h1>
+    <p class="text-gray-600 mb-6">{{ message }}</p>
+    
+    <a href="/login" 
+       class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+       🔑 Back to Login
+    </a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard-container">
+    <h1>Instagram Comments Analysis</h1>
+    <p class="subtitle">All comments are scanned using AI. Toxic ones are automatically deleted (or flagged in Preview Mode).</p>
+
+    <table id="commentsTable">
+        <thead>
+            <tr>
+                <th>Comment</th>
+                <th>Toxicity (%)</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will load here -->
+        </tbody>
+    </table>
+
+    <button id="refreshBtn">🔄 Refresh Comments</button>
+</div>
+
+<div id="notification"></div>
+
+<script>
+async function loadComments() {
+    const resp = await fetch("/get_comments");
+    const data = await resp.json();
+    const tableBody = document.querySelector("#commentsTable tbody");
+    tableBody.innerHTML = "";
+
+    if (data.comments) {
+        data.comments.forEach(item => {
+            const row = document.createElement("tr");
+
+            const commentCell = document.createElement("td");
+            commentCell.textContent = item.comment;
+            commentCell.style.color = "black";
+            row.appendChild(commentCell);
+
+            const toxicityCell = document.createElement("td");
+            toxicityCell.textContent = (item.toxicity !== undefined) ? item.toxicity.toFixed(2) + "%" : "N/A";
+            toxicityCell.style.color = "black";
+            row.appendChild(toxicityCell);
+
+            const statusCell = document.createElement("td");
+            statusCell.textContent = item.status || "Safe";
+            statusCell.style.color = "black";
+            row.appendChild(statusCell);
+
+            if (item.status === "Deleted") {
+                showNotification("🚨 Toxic comment deleted!");
+            } else if (item.status === "Preview (Toxic)") {
+                showNotification("⚠️ Toxic comment detected (Preview Mode)");
+            }
+
+            tableBody.appendChild(row);
+        });
+    }
+}
+
+document.getElementById("refreshBtn").addEventListener("click", loadComments);
+
+// initial load
+loadComments();
+
+function showNotification(message) {
+    const notification = document.getElementById("notification");
+    notification.textContent = message;
+    notification.classList.add("show");
+    setTimeout(() => notification.classList.remove("show"), 3000);
+}
+</script>
+
+<style>
+.dashboard-container { padding: 20px; text-align: center; }
+.subtitle { color: #666; margin-bottom: 20px; }
+table { width: 100%; border-collapse: collapse; margin: 20px 0;}
+table th, table td { padding: 10px; border: 1px solid #ddd; color: black !important;}
+#refreshBtn { padding: 10px 20px; background: #007bff; color:white; border:none; border-radius:5px; cursor:pointer;}
+#notification { visibility: hidden; min-width: 250px; background: #ff4d4d; color:white; padding:12px; position: fixed; top:20px; right:20px; border-radius:5px; opacity:0; transition: opacity .3s;}
+#notification.show { visibility: visible; opacity:1; }
+/* Light mode (default) */
+.comment-safe { background-color: #d4edda; color: #155724; }
+.comment-toxic { background-color: #fff3cd; color: #856404; }
+.comment-deleted { background-color: #f8d7da; color: #721c24; }
+
+/* Dark mode overrides */
+body.dark .comment-safe { background-color: #2a4d2a; color: #a6f1a6; }
+body.dark .comment-toxic { background-color: #665e1e; color: #fff3cd; }
+body.dark .comment-deleted { background-color: #5a1e1e; color: #ffbaba; }
+</style>
+{% endblock %}

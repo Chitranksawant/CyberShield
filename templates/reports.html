@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Reports</h1>
+<p>View analytics and insights from your Instagram comment moderation.</p>
+
+<div class="stats">
+  <div id="totalAnalyzed">Total Comments Analyzed: 0</div>
+  <div id="totalToxic">Total Toxic Comments: 0</div>
+  <div id="totalDeleted">Total Toxic Comments Deleted: 0</div>
+</div>
+
+<div class="extras">
+  <div>Preview Mode: <span id="previewMode">-</span></div>
+  <div>Toxicity Threshold: <span id="threshold">0.75</span></div>
+</div>
+
+<h2 style="margin-top: 24px;">Toxicity Trend (last 14 days)</h2>
+<canvas id="trendChart" height="120"></canvas>
+
+<h2 style="margin-top: 24px;">Most Common Toxic Words</h2>
+<canvas id="wordsChart" height="120"></canvas>
+
+<ul id="topWordsList" style="margin-top:12px;"></ul>
+
+<style>
+.stats { display:flex; gap:30px; margin-top:20px; font-weight:bold; flex-wrap:wrap; }
+.stats div { background:var(--card-bg,#f0f0f0); padding:15px; border-radius:10px; flex:1 1 200px; text-align:center; }
+.extras { display:flex; gap:20px; margin-top:16px; flex-wrap:wrap; }
+#topWordsList { list-style: disc; padding-left: 24px; }
+</style>
+
+<!-- Chart.js via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+async function loadReports() {
+  const r = await fetch("/reports_data");
+  const data = await r.json();
+
+  if (data.error) {
+    console.error(data.error);
+    return;
+  }
+
+  // Totals
+  document.getElementById("totalAnalyzed").textContent = "Total Comments Analyzed: " + (data.totals?.analyzed ?? 0);
+  document.getElementById("totalToxic").textContent = "Total Toxic Comments: " + (data.totals?.toxic ?? 0);
+  document.getElementById("totalDeleted").textContent = "Total Toxic Comments Deleted: " + (data.totals?.deleted ?? 0);
+
+  // Extras
+  document.getElementById("previewMode").textContent = data.previewMode ? "ON" : "OFF";
+  document.getElementById("threshold").textContent = (data.threshold ?? 0.75).toFixed(2);
+
+  // Trend chart
+  const dates = data.trend?.dates ?? [];
+  const analyzed = data.trend?.analyzed ?? [];
+  const toxic = data.trend?.toxic ?? [];
+  const deleted = data.trend?.deleted ?? [];
+
+  const ctx1 = document.getElementById("trendChart").getContext("2d");
+  if (window._trendChart) window._trendChart.destroy();
+  window._trendChart = new Chart(ctx1, {
+    type: "line",
+    data: {
+      labels: dates,
+      datasets: [
+        { label: "Analyzed", data: analyzed, fill: false },
+        { label: "Toxic", data: toxic, fill: false },
+        { label: "Deleted", data: deleted, fill: false }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: "top" } },
+      scales: { x: { ticks: { autoSkip: true } }, y: { beginAtZero: true } }
+    }
+  });
+
+  // Top words bar chart
+  const words = (data.topWords ?? []).map(w => w.word);
+  const counts = (data.topWords ?? []).map(w => w.count);
+
+  const ctx2 = document.getElementById("wordsChart").getContext("2d");
+  if (window._wordsChart) window._wordsChart.destroy();
+  window._wordsChart = new Chart(ctx2, {
+    type: "bar",
+    data: {
+      labels: words,
+      datasets: [{ label: "Count", data: counts }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+
+  // Also render list
+  const ul = document.getElementById("topWordsList");
+  ul.innerHTML = "";
+  (data.topWords ?? []).forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = `${item.word} — ${item.count}`;
+    ul.appendChild(li);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", loadReports);
+</script>
+{% endblock %}

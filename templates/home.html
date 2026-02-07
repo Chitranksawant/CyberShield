@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Welcome to CyberShield</h1>
+<p>Protect your Instagram from harmful comments with AI-powered detection.</p>
+
+<div class="features">
+    <div class="feature-card">🛡️ Automatic Toxic Comment Detection</div>
+    <div class="feature-card">📊 Real-time Analytics Dashboard</div>
+    <div class="feature-card">⚙️ Customizable Settings & Preview Mode</div>
+    <div class="feature-card">❓ Help & Support</div>
+</div>
+
+<a href="{{ url_for('dashboard') }}" class="btn">Go to Dashboard</a>
+
+<style>
+.features { display:flex; gap:15px; flex-wrap:wrap; margin-top:20px; }
+.feature-card { flex:1 1 200px; background:var(--card-bg,#f0f0f0); padding:20px; border-radius:10px; text-align:center; font-weight:bold; }
+.btn { display:inline-block; margin-top:20px; padding:12px 25px; background:#007bff; color:white; text-decoration:none; border-radius:5px; }
+</style>
+{% endblock %}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberShield - Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-600 to-indigo-800">
+  <div class="bg-white rounded-2xl shadow-2xl p-8 w-96 text-center">
+    
+    <!-- Logo -->
+    <img src="{{ url_for('static', filename='icons/icon-192.png') }}" alt="CyberShield Logo" class="w-20 h-20 mx-auto mb-4 rounded-xl">
+    
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">🔐 CyberShield Login</h1>
+    
+    <form action="/do_login" method="post" class="space-y-4">
+      <input 
+        type="text" 
+        name="username" 
+        placeholder="Enter your username" 
+        required
+        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+      <button 
+        type="submit" 
+        class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+        Login
+      </button>
+    </form>
+    
+    <p class="mt-6 text-gray-500 text-sm">
+      Secure login powered by <span class="font-semibold text-blue-600">CyberShield</span>
+    </p>
+  </div>
+</body>
+</html>

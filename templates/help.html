@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="help-container">
+    <h1>CyberShield Help & Support</h1>
+    <p>Welcome to CyberShield! Here’s how you can use the app effectively:</p>
+
+    <h2>1. Dashboard</h2>
+    <p>View all Instagram comments here. Highly toxic comments are automatically deleted (or marked in Preview Mode).</p>
+
+    <h2>2. Reports</h2>
+    <p>Check analytics of flagged comments and toxicity trends over time.</p>
+
+    <h2>3. Settings</h2>
+    <p>Enable/disable notifications and switch between light and dark themes.</p>
+
+    <h2>4. Preview Mode</h2>
+    <p>If Preview Mode is enabled, toxic comments will be detected but <strong>not deleted</strong>. This is useful for testing without affecting real comments.</p>
+
+    <h2>5. Contact Support</h2>
+    <p>If you encounter any issues, please reach out to our support team at <a href="mailto:support@cybershield.com">support@cybershield.com</a>.</p>
+
+    <h2>6. Tips</h2>
+    <ul>
+        <li>Click “Refresh Comments” in the Dashboard to update the latest comments.</li>
+        <li>Use dark mode for better visibility at night.</li>
+        <li>Keep Preview Mode enabled when testing new features.</li>
+    </ul>
+</div>
+
+<style>
+.help-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+    line-height: 1.6;
+}
+
+.help-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.help-container h2 {
+    margin-top: 20px;
+    color: #007bff;
+}
+
+.help-container p, .help-container li {
+    color: #333;
+}
+
+/* Dark mode support */
+body.dark .help-container p,
+body.dark .help-container li {
+    color: white;
+}
+
+body.dark .help-container h2 {
+    color: #66b0ff;
+}
+</style>
+{% endblock %}
