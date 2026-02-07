@@ -1,0 +1,13 @@
+# Virtual environment
+venv/
+
+# Flask sessions
+flask_session/
+
+# Secrets
+config.py
+.env
+
+# Python cache
+__pycache__/
+*.pyc
